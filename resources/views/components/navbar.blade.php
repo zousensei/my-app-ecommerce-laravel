@@ -1,3 +1,10 @@
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Kanit:wght@200&display=swap');
+  *{
+    font-family: 'Kanit', sans-serif;
+  }
+</style>
+
 <nav class="navbar navbar-expand-lg navbar-dark" style="background-color:#ee4d2d;">
   <div class="container">
     <a class="navbar-brand" href="{{url('/')}}">ZENZOU SHOP</a>
@@ -26,16 +33,20 @@
            <a href="{{url('/shoppingCart')}}" class=" text-white text-decoration-none">ตระกร้าสินค้า</a>
            <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill text-bg-light text-danger ">2</span> 
         </div>
-        <a href="#" class="px-4 text-white text-decoration-none">บัญชี</a>
+
+        <div class="dropdown">
+          <a href="#"  class="px-4 text-white text-decoration-none dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">บัญชี</a>
+          <ul class="dropdown-menu ">
+            <li><a class="dropdown-item" href="{{url('/home_account')}}">ข้อมูลบัญชี</a></li>
+            <li><a class="dropdown-item" href="{{url('/login')}}">ออกจากระบบ</a></li>
+          </ul>
+        </div>
+  
       </span>
 
   </div>
 </nav>
 
-<style>
-  @import url('https://fonts.googleapis.com/css2?family=Kanit:wght@200&display=swap');
-  *{
-    font-family: 'Kanit', sans-serif;
-  }
-</style>
+
+
 

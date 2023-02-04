@@ -5,7 +5,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <!-- css bootstrap -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD" crossorigin="anonymous">
     <title>ZENZOU</title>
     <style>
       .custombtn button {
@@ -40,14 +40,8 @@
     </div>
 </div>
 
-<div class="container pt-3" >
-    <div class="col-md-12" style="background-color:#fff;">
-    <div class="container p-4">
-         <p class="pb-2 fw-semibold">* ที่อยู่ในการจัดส่ง :</p>
-         <p>sattawat panring (+66) 630049185 92 บ้านหนองหิน หมู่ 4 ต.ศรีโคตร อ.จตุรพักตรพิมาน จ.ร้อยเอ็ด, อำเภอจตุรพักตรพิมาน, จังหวัดร้อยเอ็ด, 4518</p>
-    </div>
-    </div>
-</div>
+<!-- checkoutComponent/checkoutAddress -->
+@include('pages.shoppingCart.checkoutComponent.checkoutAddress') 
 
 <div class="container pt-3" >
     <div class="col-md-12" style="background-color:#fff;">
@@ -95,15 +89,13 @@
     <div class="container p-4 pb-5  ">
 
             <p class="pb-2 fw-semibold">สรุปการสั่งซื้อ</p> <hr>
-            <p>จำนวน <span class="text-danger">2</span>  ชิ้น</p>
-            <p class="pb-2 fw-semibold">ราคารวมสินค้า <span  style="font-size: 1.25rem;font-weight: 600;line-height: 1.5rem;color:#ee4d2d ;">990</span> บาท</p>
+            <p>ยอดราคารวมสินค้า : <span class="text-danger">250</span>  บาท</p>
+            <p>ค่าจัดส่ง :  <span class="text-danger">50</span>  บาท</p>
+            <p class="pb-2 fw-semibold">ราคารวมสินค้า <span  style="font-size: 1.25rem;font-weight: 600;line-height: 1.5rem;color:#ee4d2d ;">300</span> บาท</p>
 
-        <div class="col-md-6 custombtn" >
-              <a href="{{url('/shoppingCheckout')}}"><button type="button" >สั่งซื้อสินค้า</button></a>
-        </div>
-
-  
-
+            <div class="col-md-6 custombtn" >
+                <a href="{{url('/shoppingOrderDetail')}}"><button type="button" >สั่งซื้อสินค้า</button></a>
+            </div>
 
     </div>
     </div>
@@ -116,9 +108,7 @@
 @include('components.footer') 
 
 <!-- js bootstrap -->
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4" crossorigin="anonymous"></script>
-<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js" integrity="sha384-oBqDVmMz9ATKxIep9tiCxS/Z9fNfEXiDAYTujMAeBAsjFuCZSmKbSSUnQlmh/jp3" crossorigin="anonymous"></script>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.min.js" integrity="sha384-cuYeSxntonz0PPNlHhBs68uyIAVpIIOZZ5JqeqvYYIcEL727kskC66kF92t6Xl2V" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js" integrity="sha384-w76AqPfDkMBDXo30jS1Sgez6pr3x5MlQ1ZAGC+nuZB+EYdgRZgiwxhTBTkF7CXvN" crossorigin="anonymous"></script>
 </body>
 </html>
 

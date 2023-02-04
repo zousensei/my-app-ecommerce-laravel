@@ -15,4 +15,9 @@ class ShoppingCartColreoller extends Controller
 
         return view('pages.shoppingCart.shoppingCheckout');
     }
+
+    public function shoppingOrderDetail(){ 
+
+        return view('pages.shoppingCart.orderDetail');
+    }
 }
