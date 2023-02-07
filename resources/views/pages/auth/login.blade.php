@@ -6,6 +6,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <!-- css bootstrap -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD" crossorigin="anonymous">
+    <!-- sweetalert2 -->
+    <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <title>ZENZOU</title>
   
     <style>
@@ -43,15 +45,16 @@
         <div class="col-md-12" style="background-color:#fff;">
            <div class="container p-4">
               <p class="pb-2 fw-semibold">เข้าสู่ระบบ</p>
-              <form>
+              <form action="{{url('/checklogin')}}" method="POST">
+                    @csrf
                     <div class="mb-3">
-                      <input type="text" class="form-control" placeholder="หมายเลขโทรศัพท์ / Email / ชื่อผู้ใช้">
+                      <input type="text" class="form-control" name="username" placeholder="หมายเลขโทรศัพท์ / Email / ชื่อผู้ใช้" required>
                     </div>
                     <div class="mb-3">
-                      <input type="password" class="form-control" placeholder="รหัสผ่าน">
+                      <input type="password" class="form-control" name="password" placeholder="รหัสผ่าน" required>
                     </div>
                     <div class="custombtn" >
-                        <a href="{{url('/')}}"><button type="button" >เข้าสู่ระบบ</button></a>
+                        <button type="submit" >เข้าสู่ระบบ</button>
                     </div>
                     <small><a href="#" class="text-danger forgotPassword">ลืมรหัสผ่าน</a></small>
                     <hr>
@@ -97,6 +100,24 @@
         });
     });
 });
+</script>
+<script>
+    var alert = "{{Session::get('success')}}";
+    if(alert){
+        Swal.fire({
+            text : alert,
+            confirmButtonColor: "#ee4d2d",
+         })
+    }
+</script>
+<script>
+    var alert = "{{Session::get('error')}}";
+    if(alert){
+        Swal.fire({
+            text : alert,
+            confirmButtonColor: "#ee4d2d",
+         })
+    }
 </script>
 
 <!-- js bootstrap -->

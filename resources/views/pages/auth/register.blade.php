@@ -43,18 +43,22 @@
         <div class="col-md-12" style="background-color:#fff;">
            <div class="container p-4">
               <p class="pb-2 fw-semibold">สมัครสมาชิกใหม่</p>
-              <form>
+              <form  action="{{url('/createAccount')}}" method="POST">
+                    @csrf
                     <div class="mb-3">
-                      <input type="text" class="form-control" placeholder="ชื่อผู้ใช้">
+                      <input type="text" class="form-control" name="customer_username" placeholder="ชื่อผู้ใช้" required>
                     </div>
                     <div class="mb-3">
-                      <input type="email" class="form-control" placeholder="Email">
+                      <input type="text" class="form-control" name="customer_phone" placeholder="หมายเลขโทรศัพท์" maxlength="10" required>
                     </div>
                     <div class="mb-3">
-                      <input type="password" class="form-control" placeholder="รหัสผ่าน">
+                      <input type="email" class="form-control" name="customer_email" placeholder="Email" required>
+                    </div>
+                    <div class="mb-3">
+                      <input type="password" class="form-control" name="customer_password" placeholder="รหัสผ่าน" required>
                     </div>
                     <div class="custombtn" >
-                        <a href="#" class="registerOTP"><button type="button" >ต่อไป</button></a>
+                        <button type="submit">ต่อไป</button>
                     </div>
                     <hr>
                     <p class="text-center">
@@ -87,18 +91,6 @@
     });
 });
 
-  $(document).ready(function(){
-    $('.registerOTP').click(function(e){
-        e.preventDefault();
-        $.ajax({
-            url: '/registerOTP',
-            type: 'GET',
-            success: function(response){
-                $('#page-content').html(response);
-            }
-        });
-    });
-});
 </script>
 
 <!-- js bootstrap -->

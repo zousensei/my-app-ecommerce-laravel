@@ -6,6 +6,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <!-- css bootstrap -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD" crossorigin="anonymous">
+    <!-- sweetalert2 -->
+    <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <title>ZENZOU</title>
   
     <style>
@@ -45,15 +47,17 @@
 
 
               <p class="pb-2"><span class="fw-semibold">รหัสยืนยันตัวตน </span> <br> 
-                <small>รหัสถูกส่งไปที่ :  TESTsssss@gmail.com</small> 
+                <small>รหัสถูกส่งไปที่ :  {{ $email }}</small> 
               </p>
               
-              <form>
+              <form action="{{url('/checkOtpRegister')}}" method="POST">
+                    @csrf
                     <div class="mb-3">
-                      <input type="text" class="form-control" placeholder="รหัสยืนยันตัวตน">
+                      <input type="text" class="form-control" name="otp_code" placeholder="รหัสยืนยันตัวตน">
+                      <input type="text" class="form-control" name="otp_email"  value = "{{ $email }}" hidden>
                     </div>
                     <div class="custombtn" >
-                        <a href="{{url('/')}}"><button type="button" >ต่อไป</button></a>
+                        <button type="submit" >ต่อไป</button>
                     </div>
                     <hr> 
                     <p class="text-center pt-2"><span class="opacity-50">กลับไปหน้า</span>  <a href="#" class="text-danger loginIndex">เข้าสู่ระบบ</a></p>
@@ -65,6 +69,16 @@
   </div>
 </div>
 <div class="col-md-4"></div>
+
+<script>
+    var alert = "{{Session::get('success')}}";
+    if(alert){
+        Swal.fire({
+            text : alert,
+            confirmButtonColor: "#ee4d2d",
+         })
+    }
+</script>
 
 <!-- jquery -->
 <script src="https://code.jquery.com/jquery-3.6.1.js" integrity="sha256-3zlB5s2uwoUzrXK3BT7AX3FyvojsraNFxCc2vC/7pNI=" crossorigin="anonymous"></script>

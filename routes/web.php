@@ -29,7 +29,11 @@ Route::get('/shoppingOrderDetail',    [ShoppingCartColreoller::class,'shoppingOr
 Route::get('/home_account',           [AccountController::class,'home_account']);    
 
 Route::get('/login',                  [LoginController::class,'login']);              
+Route::post('/checklogin',            [LoginController::class,'checklogin']);              
 Route::get('/forgotPassword',         [LoginController::class,'forgotPassword']);              
-Route::get('/forgotPasswordOTP',      [LoginController::class,'forgotPasswordOTP']);              
-Route::get('/register',               [RegisterController::class,'register']);              
-Route::get('/registerOTP',            [RegisterController::class,'registerOTP']);              
+Route::get('/forgotPasswordOTP',      [LoginController::class,'forgotPasswordOTP']);   
+
+Route::get('/register',               [RegisterController::class,'register']);                          
+Route::post('/createAccount',         [RegisterController::class,'createAccount']);              
+Route::post('/checkOtpRegister',      [RegisterController::class,'checkOtpRegister']);              
+Route::get('/delOtp/{id}',      [RegisterController::class,'delOtp']);              
