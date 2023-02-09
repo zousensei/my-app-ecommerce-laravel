@@ -29,6 +29,10 @@
     </div>
 
       <span class="d-flex" >
+
+        <?php $ses_cid = Session::get('cid') ; ?>
+        @if( $ses_cid != null )  
+
         <div class="position-relative ">
            <a href="{{url('/shoppingCart')}}" class=" text-white text-decoration-none">ตระกร้าสินค้า</a>
            <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill text-bg-light text-danger ">2</span> 
@@ -41,6 +45,12 @@
             <li><a class="dropdown-item" href="{{url('/logout')}}">ออกจากระบบ</a></li>
           </ul>
         </div>
+        
+        @else 
+        <div class="px-2">
+           <a href="{{url('/login')}}" class=" text-white text-decoration-none">เข้าสู่ระบบ</a>
+        </div>
+        @endif
   
       </span>
 

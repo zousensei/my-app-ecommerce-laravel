@@ -30,6 +30,10 @@ Route::get('/shoppingCheckout',       [ShoppingCartColreoller::class,'shoppingCh
 Route::get('/shoppingOrderDetail',    [ShoppingCartColreoller::class,'shoppingOrderDetail']);    
 
 Route::get('/home_account',           [AccountController::class,'home_account']);    
+Route::post('/updateProfile',         [AccountController::class,'updateProfile']);    
+Route::post('/addAddress',            [AccountController::class,'addAddress']);    
+Route::get('/changeAddress/{id}',     [AccountController::class,'changeAddress']);    
+Route::get('/delAddress/{id}',        [AccountController::class,'delAddress']);    
 
 Route::get('/login',                  [LoginController::class,'login']);              
 Route::post('/checklogin',            [LoginController::class,'checklogin']);              

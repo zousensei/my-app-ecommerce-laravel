@@ -13,6 +13,7 @@ class User extends Authenticatable
     use HasApiTokens, HasFactory, Notifiable;
 
     protected $table = 'tb_customers';
+    protected $primaryKey = 'customer_id';
     protected $fillable = [
         'customer_username',
         'customer_name',
