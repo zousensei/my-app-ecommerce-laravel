@@ -5,7 +5,7 @@ namespace App\Http\Controllers\Auth;
 use Illuminate\Support\Facades\Hash;
 use App\Http\Controllers\Controller;
 use App\Providers\RouteServiceProvider;
-use App\Models\Customer;
+use App\Models\User;
 use App\Models\OtpRegister;
 use Illuminate\Http\Request;
 use Session;
@@ -29,7 +29,7 @@ class RegisterController extends Controller
         DB::beginTransaction();
         try {
 
-            $customer = new Customer();
+            $customer = new User();
             $customer->customer_email    = $request->customer_email;
             $customer->customer_phone    = $request->customer_phone;
             $customer->customer_username = $request->customer_username;

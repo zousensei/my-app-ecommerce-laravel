@@ -38,7 +38,7 @@
           <a href="#"  class="px-4 text-white text-decoration-none dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">บัญชี</a>
           <ul class="dropdown-menu ">
             <li><a class="dropdown-item" href="{{url('/home_account')}}">ข้อมูลบัญชี</a></li>
-            <li><a class="dropdown-item" href="{{url('/login')}}">ออกจากระบบ</a></li>
+            <li><a class="dropdown-item" href="{{url('/logout')}}">ออกจากระบบ</a></li>
           </ul>
         </div>
   

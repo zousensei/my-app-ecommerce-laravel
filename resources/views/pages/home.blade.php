@@ -53,18 +53,16 @@
 <div class="container  pb-5">
     <p class="pb-2 fw-semibold">Product</p>
     <div class="row">
-    <?php 
-    for($i=1 ; $i <= 12 ; $i++){
-     ?>
+    @foreach ($product as $products)
      <div class="col-md-2 pb-3" >
         <div class="card p-3"  style="background-color: #f7fffe ;">
             <img src="{{ asset('imgs/product/1.jfif') }}" alt="Denim Jeans" style="width:100%">
-            <h5 class="pt-2 fw-semibold text-truncate" style="font-size: 1rem;">เครื่องเป่าผมราคาถูกที่ต้องการมากที่สุด</h5>
-            <p class="price fw-semibold">฿19.99</p>
+            <h5 class="pt-2 fw-semibold text-truncate" style="font-size: 1rem;">{{ $products->product_name }}</h5>
+            <p class="price fw-semibold">฿{{ number_format($products->product_price,2) }}</p>
             <a href="{{url('/detail_product')}}" class="text-dark text-decoration-none"><button>รายละเอียด</button></a>
         </div>
     </div>
-    <?php } ?>
+    @endforeach
     </div>
 </div>
 
