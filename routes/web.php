@@ -1,12 +1,13 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\Auth\LoginController;
+use App\Http\Controllers\Auth\RegisterController;
+
 use App\Http\Controllers\ProductsController;
 use App\Http\Controllers\ShoppingCartColreoller;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\AccountController;
-use App\Http\Controllers\Auth\LoginController;
-use App\Http\Controllers\Auth\RegisterController;
 
 /*
 |--------------------------------------------------------------------------
@@ -21,10 +22,13 @@ use App\Http\Controllers\Auth\RegisterController;
 
 Route::get('/',                       [HomeController::class,'homeIndex']);   
 
-Route::get('/detail_product',         [ProductsController::class,'detail_product']);   
+Route::get('/detail_product/{id}',    [ProductsController::class,'detail_product']);   
 
 Route::get('/categorys',              [CategoryController::class,'categorys']);     
          
+Route::post('/carts',                 [ShoppingCartColreoller::class,'addCart']);             
+Route::get('/delCart/{id}',           [ShoppingCartColreoller::class,'delCart']);             
+Route::get('/checkListProduct',       [ShoppingCartColreoller::class,'checkListProduct']);             
 Route::get('/shoppingCart',           [ShoppingCartColreoller::class,'shoppingCart']);             
 Route::get('/shoppingCheckout',       [ShoppingCartColreoller::class,'shoppingCheckout']);    
 Route::get('/shoppingOrderDetail',    [ShoppingCartColreoller::class,'shoppingOrderDetail']);    

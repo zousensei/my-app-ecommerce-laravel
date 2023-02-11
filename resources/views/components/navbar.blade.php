@@ -5,6 +5,9 @@
   }
 </style>
 
+<!-- jquery -->
+<script src="https://code.jquery.com/jquery-3.6.1.js" integrity="sha256-3zlB5s2uwoUzrXK3BT7AX3FyvojsraNFxCc2vC/7pNI=" crossorigin="anonymous"></script>
+
 <nav class="navbar navbar-expand-lg navbar-dark" style="background-color:#ee4d2d;">
   <div class="container">
     <a class="navbar-brand" href="{{url('/')}}">ZENZOU SHOP</a>
@@ -32,10 +35,18 @@
 
         <?php $ses_cid = Session::get('cid') ; ?>
         @if( $ses_cid != null )  
-
+       
+        <?php $amountCart = DB::Table('tb_carts')->select(DB::raw('SUM(amount) as amounts'))->where('customer_id', $ses_cid)->first(); ?>
+        
         <div class="position-relative ">
            <a href="{{url('/shoppingCart')}}" class=" text-white text-decoration-none">ตระกร้าสินค้า</a>
-           <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill text-bg-light text-danger ">2</span> 
+           @if( $amountCart->amounts != null )  
+           <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill text-bg-light text-danger ">
+              {{ $amountCart->amounts }}
+           </span> 
+           @else 
+
+           @endif
         </div>
 
         <div class="dropdown">
@@ -56,6 +67,7 @@
 
   </div>
 </nav>
+
 
 
 

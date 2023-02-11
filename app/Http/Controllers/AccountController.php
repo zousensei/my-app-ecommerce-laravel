@@ -71,7 +71,7 @@ class AccountController extends Controller
             }
 
             DB::commit();
-            return redirect('/home_account')->with('success', 'เพิ่มข้อมูลที่อยู่สำเร็จ');
+            return back()->with('success', 'เพิ่มข้อมูลที่อยู่สำเร็จ');
         } catch (\Throwable $th) {
             dd($th);
             DB::rollback();
@@ -90,7 +90,7 @@ class AccountController extends Controller
             $p           = Address::where('customer_address_id',$id)->update(['address_status'=>'on']);
             
             DB::commit();
-            return redirect('/home_account')->with('success', 'เปลี่ยนค่าเริ่มต้นที่อยู่ เรียบร้อย !');
+            return back()->with('success', 'เปลี่ยนค่าเริ่มต้นที่อยู่ เรียบร้อย !');
         } catch (\Throwable $th) {
             dd($th);
             DB::rollback();

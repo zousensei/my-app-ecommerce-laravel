@@ -29,7 +29,7 @@
 <!-- component/navbar -->
 @include('components.navbar') 
 
-<?php $count_num = 5 ; ?>
+<?php $product_qty = $products_detail->product_amount ; ?>
 <div class="container pt-5 ">
   <div class="row"  style="background-color:#fff ;">
 
@@ -52,7 +52,7 @@
                   <div class="pt-4">
                     
                   <span style="font-size: 1.25rem;font-weight: 600;line-height: 1.5rem;">
-                    ไดร์เป่าผม รุ่นckl-6268 คละสี คละยี่ห้อ CKL or JMF ไดร์เป่าผม ปรับความร้อน&แรงลมได้) ไดร์เป่าผม เป่าผม 
+                    {{ $products_detail->product_name }} 
                   </span>
                   <div class="pt-3">
                     <button button type="button" class="btn btn-outline-danger btn-sm">ถูกใจ</button>&nbsp;
@@ -60,20 +60,26 @@
                   </div>
                   <div class="pt-3" >
                     <div class="container" style="background-color: #fef6f5 ;"> 
-                        <h4 class="p-3"><span style="font-size: 1.875rem;font-weight: 700;color: #ee4d2d;">฿199.00</span> THB</h4>
+                        <h4 class="p-3"><span style="font-size: 1.875rem;font-weight: 700;color: #ee4d2d;">฿{{ $products_detail->product_price }} </span> THB</h4>
                     </div>
                   </div>
 
-                  <div class="col-md-6 py-3 ">
-                    <h6 class="fw-semibold">เลือกจำนวนสินค้า</h6>
-                    <input type="number" class="form-control" min="1" max="<?php echo  $count_num ?>" value="1"/>
-                    <small>( มีสินค้าทั้งหมด <?php echo  $count_num ?> ชิ้น )</small>
-                  </div>
+                  <form action="{{url('/carts')}}" method="POST" id="formcart">
+                       @csrf
+                       <input type="hidden" name="back" value="1" id="backpage">
+                       <input type="hidden" name="product_id" value="{{$products_detail->product_id}}">
+                      <div class="col-md-6 py-3 ">
+                        <h6 class="fw-semibold">เลือกจำนวนสินค้า</h6>
+                        <input type="number" class="form-control" min="1" max="<?php echo  $product_qty ?>" name="amount" value="1"/>
+                        <small>( มีสินค้าทั้งหมด <?php echo  $product_qty ?> ชิ้น )</small>
+                      </div>
 
-                  <div class="pt-3 custombtn">
-                    <a href="{{url('/shoppingCart')}}"><button type="button" >ซื้อสินค้า</button></a>
-                    <button type="button" >ใส่ตระกร้า</button>
-                  </div>
+                      <div class="pt-3 custombtn">
+                        <button type="submit" >ซื้อสินค้า</button>
+                        <a href="javascript:;"  onclick="addCart();"><button type="button">ใส่ตระกร้า</button></a>
+                      </div>
+
+                  </form>
 
                   </div>
                 <!-- end contant -->
@@ -92,9 +98,13 @@
                 </div>
 
                 <div class="pt-1" >
-                    <div class="container p-3" style="background-color:#fff ;">      
-                    <p>หมวดหมู่ : ไดร์เป่าผม</p>
-                    <p>จำนวน : 5</p>
+                    <div class="container p-3" style="background-color:#fff ;">  
+                    <?php
+                    $category_id      = $products_detail->category_id  ;
+                    $categoey_product = DB::table('tb_category')->where('category_id', $category_id )->first();
+                    ?>    
+                    <p>หมวดหมู่ : {{ $categoey_product->category_name }}</p>
+                    <p>จำนวน :   {{ $products_detail->product_amount }}</p>
                     <p>ส่งจาก : ร้อยเอ็ด</p>
 
                     </div>
@@ -108,16 +118,7 @@
 
                 <div class="pt-1" >
                     <div class="container p-3" style="background-color:#fff ;">      
-                      รองเท้าลายการ์ตูน รองเท้าแตะน่ารัก ใส่เล่นในวันสบายๆ ตัวรองเท้าเป็นยาง ล้างทำความสะอาดง่าย แบบสวม หน้ารองเท้าแต่งเป็นลายกีกี้ ลาล่า เพิ่มความน่ารัก เอาใจสาวกลิตเติ้ลทวินสตาร์🌈
-                      <br>
-                      ---<br>
-                      1、หลังจากรับสินค้า ถ้าลูกค้าพอใจ กรุณาให้5ดาวค่ะ⭐⭐⭐⭐⭐ 
-                      นี่เป็นสิ่งสำคัญมากสำหรับร้านค้าค่ะ 🙏🏻🙏🏻  HotSale.store ขอบคุณที่ให้กำลังใจค่ะ 💐💐<br><br>
-
-                      2、หากลูกค้าไม่พอใจกับการสั่งสินค้าหรือมีปัญหาอย่างไรเกิดขึ้น 
-                      📲📲 โปรดบอกในแชท ทางร้านจะรับผิดชอบในสิ่งที่เกิดขึ้นและช่วยกันแก้ไขปัญหาค่ะ 🙇🏻‍♀️🙇🏻‍♂️ <br><br>
-
-                      #HotSale #Fashion #Women #littletwinstars #รองเท้าแตะลิตเติ้ลทวินสตาร์ #พริตตี้ #ราคาส่ง #พร้อมส่ง #รองเท้าสตรี #รองเท้า #รองเท้าลำลอง #รองเท้าเกาหลี #รองเท้าฤดูร้อน #รองเท้าแตะราคาถูก #รองเท้านุ่ม #รองเท้าราคาส่ง #รองเท้าเด็กผู้หญิง #รองเท้าคุณภาพดีราคาถูก #รองเท้าsale #รองเท้าลุยน้ำ #รองเท้าฮิต #รองเท้ารัดส้น #รองเท้าลําลอง #ราคาถูก #รองเท้าส้นสูง #รองเท้าแฟชั่น  #รองเท้าแตะแบบสบาย #รองเท้าแตะรัดส้น #รองเท้ารัดส้น #รองเท้ารัดส้นผู้หญิง #รองเท้าสายรัดข้อ #รองเท้าผู้หญิง #รองเท้าพร้อมส่ง #รองเท้านําเข้า #รองเท้าแตะลำลอง
+                        {{ $products_detail->product_name }} 
                     </div>
                 </div>
 
@@ -142,6 +143,30 @@
 
 <!-- component/footer -->
 @include('components.footer') 
+
+<!-- sweetalert2 -->
+<script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+<script>
+    var alert = "{{Session::get('success')}}";
+    if(alert){
+        Swal.fire({
+            text : alert,
+            confirmButtonColor: "#ee4d2d",
+         })
+    }
+</script>
+
+<script>
+
+   function addCart(){ //เพิ่มสินค้าลงตะกร้า
+      document.getElementById('backpage').value =2;
+      $('#formcart').submit();
+    }
+
+    //---------------------------------------------------------//
+
+</script>
 
 <!-- js bootstrap -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js" integrity="sha384-w76AqPfDkMBDXo30jS1Sgez6pr3x5MlQ1ZAGC+nuZB+EYdgRZgiwxhTBTkF7CXvN" crossorigin="anonymous"></script>

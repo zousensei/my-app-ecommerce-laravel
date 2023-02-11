@@ -59,7 +59,7 @@
             <img src="{{ asset('imgs/product/1.jfif') }}" alt="Denim Jeans" style="width:100%">
             <h5 class="pt-2 fw-semibold text-truncate" style="font-size: 1rem;">{{ $products->product_name }}</h5>
             <p class="price fw-semibold">฿{{ number_format($products->product_price,2) }}</p>
-            <a href="{{url('/detail_product')}}" class="text-dark text-decoration-none"><button>รายละเอียด</button></a>
+            <a href="{{url('/detail_product/'.$products->product_id.'')}}" class="text-dark text-decoration-none"><button>รายละเอียด</button></a>
         </div>
     </div>
     @endforeach
