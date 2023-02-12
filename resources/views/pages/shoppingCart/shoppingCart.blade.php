@@ -38,83 +38,139 @@
     </div>
 </div>
 
-<form action="{{ url('/shoppingCheckout') }}" method="get">
-<div class="container pt-3" >
+    <form action="{{ url('/addNewOrders') }}" method="POST">
+    @csrf
+    <div class="container pt-3" >
+        <div class="col-md-12" style="background-color:#fff;">
+        <div class="container p-4">
+            
+        <table class="table">
+            <tbody>
+            @if($myCart->count() != 0)
+                @foreach($myCart as $key => $myCarts)
+                
+                <?php 
+                    $product = DB::Table('tb_product')->where('product_id', $myCarts->product_id )->first();       
+                ?>
+                <tr>
+                    <td width="2%">
+                        <div class="form-check pt-4">
+                             <input class="form-check-input checkbox" type="checkbox" value="{{ $product->product_price * $myCarts->amount  }}" id="checkboxPrice{{$product->product_id}}" onclick="updateCheckboxes({{$product->product_id}})"> 
+                             <input class="form-check-input checkbox" type="checkbox" value="{{ $myCarts->product_id  }}" name="product_id[]" id="checkboxProductId{{$product->product_id}}" hidden> 
+                             <input class="form-check-input checkbox" type="checkbox" value="{{ $myCarts->amount  }}" name="amount[]" id="checkboxAmount{{$product->product_id}}" hidden> 
+                        </div>
+                    </td>
+                    <td width="10%"><img src="{{ asset('imgs/product/1.jfif') }}" class="rounded-0" alt="..." width="100rem"> </td>
+                    <td> {{$product->product_name}} <br>ราคาต่อหน่วย : {{ number_format($product->product_price,2) }} บาท<br> 
+                        จำนวน : x{{ $myCarts->amount }} <br> 
+                        ราคารวม : {{ number_format($product->product_price *  $myCarts->amount,) }} บาท 
+                    </td>
+                    <td><a href="{{ url('/delCart/'.$myCarts->cart_id.'') }}" class="text-danger text-decoration-none"><p >ลบ</p></a></td>
+                </tr>
+                @endforeach
+            @else
+                <tr style="text-align: center;">
+                    <td colspan="4"> ### ไม่มีสินค้าในตะกร้า ###</td>
+                </tr>
+            @endif
+
+            </tbody>
+            </table>
+
+        </div>
+        </div>
+    </div>
+
+    <div class="container pt-3" >
+        <div class="col-md-12" style="background-color:#fff;">
+        <div class="container p-4 pb-5  ">
+
+                <p class="pb-2 fw-semibold">* ขนส่ง</p> <hr class="pb-3">
+
+                <?php 
+                $transports = array(
+                    array( 'transport' => 'ไปรษณีไทย' , 'transport_price' => '60' ),
+                    array( 'transport' => 'แฟรช' ,      'transport_price' => '120' ),
+                    array( 'transport' => 'kerry' ,     'transport_price' => '80' ),
+                );
+                ?>
+
+                <select class="form-select form-select-lg" id="shipping" name="transport_price" required>
+                <option selected value="">เลือกขนส่ง</option>
+
+                <?php foreach ($transports as $transport) { ?>
+                    <option value="<?php echo $transport['transport_price']; ?>"><?php echo $transport['transport']; ?> ( ค่าส่ง <?php echo $transport['transport_price']; ?> บาท )</option>
+                <?php } ?>
+
+                </select>
+                <input type="hidden" name="transport" id="transport">
+                
+        </div>
+        </div>
+    </div>
+
+    <div class="container pt-3" >
+        <div class="col-md-12" style="background-color:#fff;">
+        <div class="container p-4 pb-5  ">
+
+                <p class="pb-2 fw-semibold">สรุปการสั่งซื้อ</p> <hr>
+                <p>จำนวน <span class="text-danger" id="count">0</span>  รายการ</p>
+                <p class="pb-2 fw-semibold">ราคารวมสินค้า <span  style="font-size: 1.25rem;font-weight: 600;line-height: 1.5rem;color:#ee4d2d ;" id="total">0</span> บาท</p>
+
+            <div class="col-md-6 custombtn" >
+                <button type="button" id="notiAlert">ดำเนินการต่อ</button>
+                <button type="submit" id="submitAddOrders" hidden>ดำเนินการต่อ</button>
+                <a href="{{url('/')}}"><button type="button" >ซื้อสินค้าต่อ</button></a>
+            </div>
+
+        </div>
+        </div>
+    </div>
+    </form>
+
+
+    <div class="container pt-3 pb-5" >
     <div class="col-md-12" style="background-color:#fff;">
     <div class="container p-4">
-        
-    <table class="table">
-        <tbody>
-        @if($myCart->count() != 0)
-             <?php $i = 1 ;?>
-            @foreach($myCart as $key => $myCarts)
-            
-            <?php 
-                $product = DB::Table('tb_product')->where('product_id', $myCarts->product_id )->first();       
-            ?>
+        <p class="pb-2 fw-semibold">ออร์เดอรที่ยังไม่ชำระเงิน</p>
+
+        <table class="table">
+        @if($Order->count() != 0)
+        <?php $No = 1 ;?>
+        @foreach($Order as $Orders)
+        <?php 
+            $countOrders = DB::Table('tb_orders')->where('code_orders', $Orders->code_orders )->get();       
+        ?>
             <tr>
-                <td width="2%">
-                    <div class="form-check pt-4">
-                        <input class="form-check-input checkbox" type="checkbox" value="{{ $product->product_price * $myCarts->amount  }}" id="checkbox{{$product->product_id}}">
-                    </div>
+                <td width="10%" class="text-center">{{ $No++ }}</td>
+                <td width="10%" class="text-center">ID Order : {{ $Orders->code_orders }} </td>
+
+                <td width="20%" class="text-center">{{ $countOrders->count() }} รายการ</td>
+
+                <td width="20%" class="text-center">วันที่ {{ $Orders->created_at }}</td>
+                <td width="20%" >
+                <div class="custombtn text-center">
+                  <button type="button" style="width:40%; background-color: #353b45; padding: 8px; font-size: 15px;">ดำเนินการต่อ</button>
+                  <a href="{{url('/delOrders/'.$Orders->code_orders.'')}}" onclick="return confirm('คุณต้องการยกเลิกออ์เดอร์ [ {{ $Orders->code_orders }} ] ใช่ไหม ? ')">
+                    <button type="button" style="width:40%; background-color: #dc3545; padding: 8px; font-size: 15px;">
+                        ยกเลิก
+                    </button>
+                  </a>
+                </div>
+                
                 </td>
-                <td width="10%"><img src="{{ asset('imgs/product/1.jfif') }}" class="rounded-0" alt="..." width="100rem"> </td>
-                <td> {{$product->product_name}} <br>ราคาต่อหน่วย : {{ number_format($product->product_price,2) }} บาท<br> 
-                     จำนวน : x{{ $myCarts->amount }} <br> 
-                     ราคารวม : {{ number_format($product->product_price *  $myCarts->amount,) }} บาท 
-                </td>
-                <td><a href="{{ url('/delCart/'.$myCarts->cart_id.'') }}" class="text-danger text-decoration-none"><p >ลบ</p></a></td>
             </tr>
-            @endforeach
+        @endforeach
         @else
             <tr style="text-align: center;">
-                <td colspan="4"> ### ไม่มีสินค้าในตะกร้า ###</td>
+                <td colspan="4"> ### ไม่มีรายการออร์เดอร์ ###</td>
             </tr>
-        @endif
-
-        </tbody>
+         @endif
         </table>
 
     </div>
     </div>
-</div>
-
-<div class="container pt-3" >
-    <div class="col-md-12" style="background-color:#fff;">
-    <div class="container p-4 pb-5  ">
-
-            <p class="pb-2 fw-semibold">* ขนส่ง</p> <hr class="pb-3">
-
-            <select class="form-select form-select-lg" id="shipping" required>
-                <option selected value="">เลือกขนส่ง</option>
-                <option value="60">ไปรษณีไทย ( ค่าส่ง 60 บาท )</option>
-                <option value="120">แฟรช ( ค่าส่ง 120 บาท )</option>
-                <option value="80">kerry ( ค่าส่ง 80 บาท ) </option>
-            </select>
-            
     </div>
-    </div>
-</div>
-
-<div class="container pt-3 pb-5" >
-    <div class="col-md-12" style="background-color:#fff;">
-    <div class="container p-4 pb-5  ">
-
-            <p class="pb-2 fw-semibold">สรุปการสั่งซื้อ</p> <hr>
-            <p>จำนวน <span class="text-danger" id="count">0</span>  รายการ</p>
-            <p class="pb-2 fw-semibold">ราคารวมสินค้า <span  style="font-size: 1.25rem;font-weight: 600;line-height: 1.5rem;color:#ee4d2d ;" id="total">0</span> บาท</p>
-
-        <div class="col-md-6 custombtn" >
-            <button type="button" id="notiAlert">ดำเนินการต่อ</button>
-            <button type="submit" id="submitAddOrders" hidden>ดำเนินการต่อ</button>
-            <a href="{{url('/')}}"><button type="button" >ซื้อสินค้าต่อ</button></a>
-        </div>
-
-    </div>
-    </div>
-</div>
-</form>
-
 
 <!-- component/footer -->
 @include('components.footer') 
@@ -122,8 +178,27 @@
 <!-- sweetalert2 -->
 <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
-<script>
 
+<script> //การส่ง transport ไปกับ select  
+    document.getElementById("shipping").addEventListener("change", function() {
+        var selectedTransport = this.options[this.selectedIndex].text;
+        selectedTransport = selectedTransport.split(" (")[0];
+        document.getElementById("transport").value = selectedTransport;
+    });
+</script>
+
+<script>
+    function updateCheckboxes(id) { //เลือก check พร้อมกัน
+        var checkboxPrice = document.getElementById("checkboxPrice" + id);
+        var checkboxProductId = document.getElementById("checkboxProductId" + id);
+        var checkboxAmount = document.getElementById("checkboxAmount" + id);
+        checkboxProductId.checked = checkboxPrice.checked;
+        checkboxAmount.checked = checkboxPrice.checked;
+    }
+</script>
+
+<script>
+    // คำนวนราคา
     const checkboxes     = document.querySelectorAll('.checkbox');
     const shippingSelect = document.querySelector('#shipping');
     const total          = document.querySelector('#total');
@@ -153,6 +228,7 @@
     total.textContent = sum + shippingFee;
     });
 
+    //แจ้งเตือนให้เลือกสินค้า
     document.querySelector("#notiAlert").addEventListener("click", function() {
         if (checkedCount === 0) {
             Swal.fire({

@@ -39,9 +39,11 @@
     </div>
     </div>
 </div>
+<form action="" method="POST">
 
 <!-- checkoutComponent/checkoutAddress -->
 @include('pages.shoppingCart.checkoutComponent.checkoutAddress') 
+
 
 <div class="container pt-3" >
     <div class="col-md-12" style="background-color:#fff;">
@@ -49,14 +51,27 @@
         
     <table class="table">
         <tbody>
-        <?php 
-        for($i=1 ; $i <= 3 ; $i++){
-        ?>
+            <?php 
+                $sum_total = 0 ;
+            ?>
+            @foreach($myOrder as $myOrders)
+            <?php 
+                $product   =  DB::Table('tb_product')->where('product_id', $myOrders->product_id )->first();   
+                $sum       =  $product->product_price * $myOrders->amount ;
+                $sum_total += $sum ;
+            ?>
             <tr>
                 <td width="10%"><img src="{{ asset('imgs/product/1.jfif') }}" class="rounded-0" alt="..." width="100rem"> </td>
-                <td>ปลากัดหม้อตัวเมีย (Gold Flying) <br>ราคา : 199 บาท<br>จำนวน : x1</td>
+                <td>
+                {{ $product->product_name }} <br>
+                ราคาต่อหน่วย : {{ $product->product_price }} บาท<br>
+                จำนวน : x{{ $myOrders->amount }} <br>
+                ราคารวม : {{ number_format($product->product_price *  $myOrders->amount,2) }} บาท 
+                </td>
             </tr>
-        <?php } ?>
+            <input class="form-check-input" type="text" value="{{ $myOrders->product_id  }}" name="product_id[]" hidden> 
+            <input class="form-check-input" type="text" value="{{ $myOrders->amount }}" name="amount[]" hidden> 
+            @endforeach
         </tbody>
         </table>
 
@@ -68,16 +83,15 @@
     <div class="col-md-12" style="background-color:#fff;">
     <div class="container p-4">
          <p class="pb-2 fw-semibold">* ช่องทางชำระเงิน</p>
-         <p>Wallet</p>
-         <select class="form-select form-select-lg mb-3" aria-label=".form-select-lg example">
-            <option selected>เลือกช่องทางชำระเงิน</option>
-            <option value="1">Paypal</option>
-            <option value="2">Wallet</option>
-            <option value="3">KPLUS</option>
-            <option value="3">Krungsri</option>
-            <option value="3">Krungthai Next</option>
-            <option value="3">SCB EASY</option>
-            <option value="3">BualuangM</option>
+         <p >ชำระเงินผ่านช่องทาง : <span id="name_bank"> </span> </p> 
+         <select class="form-select form-select-lg mb-3"  name="bank" required>
+            <option selected value="">เลือกช่องทางชำระเงิน</option>
+            <option value="Wallet">Wallet</option>
+            <option value="KPLUS">KPLUS</option>
+            <option value="Krungsri">Krungsri</option>
+            <option value="Krungthai Next">Krungthai Next</option>
+            <option value="SCB EASY">SCB EASY</option>
+            <option value="BualuangM">BualuangM</option>
         </select>
 
     </div>
@@ -89,19 +103,25 @@
     <div class="container p-4 pb-5  ">
 
             <p class="pb-2 fw-semibold">สรุปการสั่งซื้อ</p> <hr>
-            <p>ยอดราคารวมสินค้า : <span class="text-danger">250</span>  บาท</p>
-            <p>ค่าจัดส่ง :  <span class="text-danger">50</span>  บาท</p>
-            <p class="pb-2 fw-semibold">ราคารวมสินค้า <span  style="font-size: 1.25rem;font-weight: 600;line-height: 1.5rem;color:#ee4d2d ;">300</span> บาท</p>
+            <p>ยอดราคารวมสินค้า : <span class="text-danger">{{ number_format($sum_total,2) }}</span>  บาท</p>
+            <p>ค่าจัดส่ง :  <span class="text-danger"> ( {{ $checkMyOrder->transport }} ) {{ $checkMyOrder->transport_price }}</span>  บาท</p>
+            <p class="pb-2 fw-semibold">ราคารวมสินค้า <span  style="font-size: 1.25rem;font-weight: 600;line-height: 1.5rem;color:#ee4d2d ;">{{ number_format($sum_total + $checkMyOrder->transport_price,2) }}</span> บาท</p>
 
             <div class="col-md-6 custombtn" >
-                <a href="{{url('/shoppingOrderDetail')}}"><button type="button" >สั่งซื้อสินค้า</button></a>
+                 <input class="form-check-input" type="text" value="{{ $checkMyOrder->code_orders }}" name="code_orders" hidden> 
+                 <input class="form-check-input" type="text" value="{{ $checkMyOrder->transport }}" name="transport" hidden> 
+                 <input class="form-check-input" type="text" value="{{ $checkMyOrder->transport_price }}" name="transport_price" hidden> 
+                <button type="submit" >สั่งซื้อสินค้า</button>
+                <a href="{{url('/delOrders/'.$checkMyOrder->code_orders.'')}}" onclick="return confirm('คุณต้องการยกเลิก [ ออร์เดอร์นี้ ] ใช่ไหม ? ')">
+                    <button type="button" style="background-color: #353b45;">ยกเลิก ออร์เดอร์
+                </button></a>
             </div>
 
     </div>
     </div>
 </div>
 
-
+</form>
 
 
 <!-- component/footer -->
@@ -109,6 +129,16 @@
 
 <!-- sweetalert2 -->
 <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+<script>
+    //สคลิปแสดงข้อมูลธนาคารที่เลือก
+    const selectElement = document.querySelector('.form-select');
+    const nameBankElement = document.querySelector('#name_bank');
+  
+    selectElement.addEventListener('change', function() {
+        nameBankElement.textContent = selectElement.value;
+    });
+</script>
 
 <script>
     var alert = "{{Session::get('success')}}";

@@ -35,6 +35,32 @@
 <!-- accountComponent/addressAccount -->
 @include('pages.account.accountComponent.addressAccount') 
 
+
+<div class="container pt-3" >
+    <div class="col-md-12" style="background-color:#fff;">
+    <div class="container p-4">
+        <p class="pb-2 fw-semibold">ออร์เดอรที่ยังไม่ชำระเงิน</p>
+
+        <table class="table">
+            <tr>
+                <td width="10%" class="text-center">1</td>
+                <td width="10%" class="text-center">ID Order : 623613 </td>
+                <td width="20%" class="text-center">3 รายการ</td>
+                <td width="20%" class="text-center">วันที่ 10/11/2013 10:11:46</td>
+                <td width="20%" >
+                <div class="custombtn text-center">
+                  <button type="button" style="width:40%; background-color: #353b45; padding: 8px; font-size: 15px;">ดำเนินการต่อ</button>
+                  <button type="button" style="width:40%; background-color: #dc3545; padding: 8px; font-size: 15px;">ยกเลิก</button>
+                </div>
+
+                </td>
+            </tr>
+        </table>
+
+    </div>
+    </div>
+</div>
+
 <!-- accountComponent/historyOrderAccount -->
 @include('pages.account.accountComponent.historyOrderAccount') 
 
