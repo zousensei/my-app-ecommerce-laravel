@@ -42,19 +42,41 @@
         <p class="pb-2 fw-semibold">ออร์เดอรที่ยังไม่ชำระเงิน</p>
 
         <table class="table">
+        @if($Order->count() != 0)
+        <?php $No = 1 ;?>
+        @foreach($Order as $Orders)
+        <?php 
+            $countOrders = DB::Table('tb_orders')->where('code_orders', $Orders->code_orders )->get();       
+        ?>
             <tr>
-                <td width="10%" class="text-center">1</td>
-                <td width="10%" class="text-center">ID Order : 623613 </td>
-                <td width="20%" class="text-center">3 รายการ</td>
-                <td width="20%" class="text-center">วันที่ 10/11/2013 10:11:46</td>
+                <td width="10%" >{{ $No++ }}</td>
+                <td width="10%" class="text-center">ID Order : {{ $Orders->code_orders }} </td>
+
+                <td width="20%" class="text-center">{{ $countOrders->count() }} รายการ</td>
+
+                <td width="20%" class="text-center">วันที่ {{ $Orders->created_at }}</td>
                 <td width="20%" >
                 <div class="custombtn text-center">
-                  <button type="button" style="width:40%; background-color: #353b45; padding: 8px; font-size: 15px;">ดำเนินการต่อ</button>
-                  <button type="button" style="width:40%; background-color: #dc3545; padding: 8px; font-size: 15px;">ยกเลิก</button>
+                 <a href="{{url('/shoppingCheckout/'.$Orders->code_orders.'')}}">
+                    <button type="button" style="width:40%; background-color: #353b45; padding: 8px; font-size: 15px;">
+                            ดำเนินการต่อ
+                    </button>
+                 </a>
+                  <a href="{{url('/delOrders/'.$Orders->code_orders.'')}}" onclick="return confirm('คุณต้องการยกเลิกออ์เดอร์ [ {{ $Orders->code_orders }} ] ใช่ไหม ? ')">
+                    <button type="button" style="width:40%; background-color: #dc3545; padding: 8px; font-size: 15px;">
+                        ยกเลิก
+                    </button>
+                  </a>
                 </div>
-
+                
                 </td>
             </tr>
+        @endforeach
+        @else
+            <tr style="text-align: center;">
+                <td colspan="4"> ### ไม่มีรายการออร์เดอร์ ###</td>
+            </tr>
+         @endif
         </table>
 
     </div>

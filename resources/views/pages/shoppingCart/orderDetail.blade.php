@@ -37,13 +37,13 @@
          <div class="row">
             <div class="col-md-6">
                 <p class="pb-2 fw-semibold">รายละเอียดการซื้อ:</p>
-                <p>ID Order : 623513</p>
-                <p>วันที่ : 12-12-2026 10:11:59</p>
+                <p>ID Order : {{ $myOrdersDetail->code_orders }}</p>
+                <p>วันที่ : {{ $myOrdersDetail->created_at }}</p>
             </div>
             <div class="col-md-6">
                 <p class="pb-2 fw-semibold">ข้อมูลการจัดส่งลูกค้า :</p>
-                <p>ชื่อผู้รับ : Sattawat Phanring เบอร์โทร : 0630049185</p>
-                <p>92 ศรีโคตร จตุรพักตรพิมาน ร้อยเอ็ด รหัสไปรษณี : 45180</p>
+                <p>ชื่อผู้รับ : {{ $myOrdersDetail->customer_name }} &nbsp; เบอร์โทร : {{ $myOrdersDetail->customer_phone }}</p>
+                <p>{{ $myOrdersDetail->customer_address }} {{ $myOrdersDetail->customer_tumbon }} {{ $myOrdersDetail->customer_district }} {{ $myOrdersDetail->customer_province }} รหัสไปรษณี : {{ $myOrdersDetail->customer_postcode }}</p>
             </div>
         </div>
 
@@ -62,23 +62,28 @@
                     <td>จำนวน</td>
                     <td>ราคา</td>
                 </tr>
+                <?php 
+                $sum_total = 0 ;
+                $i = 1 ;
+                ?>
+                @foreach($myOrdersDetailGet as $myOrdersDetailGets)
+                <?php 
+                    $product   =  DB::Table('tb_product')->where('product_id', $myOrdersDetailGets->product_id )->first();   
+                    $sum       =  $product->product_price * $myOrdersDetailGets->amount ;
+                    $sum_total += $sum ;
+                ?>
                 <tr>
-                    <td>1</td>
-                    <td>น้ำปลา</td>
-                    <td>x1</td>
-                    <td>180</td>
+                    <td>{{ $i++ }}</td>
+                    <td>{{ $product->product_name }}</td>
+                    <td>x{{ $myOrdersDetailGets->amount }}</td>
+                    <td>{{  number_format($product->product_price * $myOrdersDetailGets->amount,2)  }}</td>
                 </tr>
-                <tr>
-                    <td>2</td>
-                    <td>น้ำตาลทราย</td>
-                    <td>x1</td>
-                    <td>70</td>
-                </tr>
+                @endforeach
                 <tr style="background-color:#fafafa ;">
                     <td></td>
                     <td>ยอดรวมทั้งหมด</td>
                     <td></td>
-                    <td>250</td>
+                    <td>{{ number_format($sum_total,2) }}</td>
                 </tr>
         </table>
 
@@ -91,9 +96,9 @@
     <div class="container p-4 pb-5  ">
 
             <p class="pb-2 fw-semibold">สรุปการสั่งซื้อ</p> <hr>
-            <p>ยอดราคารวมสินค้า : <span class="text-danger">250</span>  บาท</p>
-            <p>ค่าจัดส่ง : <span class="text-danger">50</span>  บาท</p>
-            <p class="pb-2 fw-semibold">ราคารวมทั้งหมด <span  style="font-size: 1.25rem;font-weight: 600;line-height: 1.5rem;color:#ee4d2d ;">300</span> บาท</p>
+            <p>ยอดราคารวมสินค้า : <span class="text-danger">{{ number_format($sum_total,2) }}</span>  บาท</p>
+            <p>ค่าจัดส่ง : <span class="text-danger">( {{ $myOrdersDetail->transport }} ) {{ $myOrdersDetail->transport_price }} </span>  บาท</p>
+            <p class="pb-2 fw-semibold">ราคารวมทั้งหมด <span  style="font-size: 1.25rem;font-weight: 600;line-height: 1.5rem;color:#ee4d2d ;">{{ $myOrdersDetail->price_total }}</span> บาท</p>
 
             <div class="col-md-6 custombtn" >
                 <a href="{{url('/')}}"><button type="button" >กลับหน้าหลัก</button></a>

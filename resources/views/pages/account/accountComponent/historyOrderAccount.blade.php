@@ -4,20 +4,32 @@
         <p class="pb-2 fw-semibold">การสั่งซื้อของฉัน</p>
 
         <table class="table">
+
+            <?php 
+                $sum_total = 0 ;
+                $i = 1 ;
+            ?>
+            @foreach($myOrderDetails as $myOrderDetail)
+            <?php 
+                $countOrdersDetails = DB::Table('tb_orders_detail')->where('code_orders', $myOrderDetail->code_orders )->get();       
+            ?>
             <tr>
-                <td>1</td>
-                <td width="15%">ID Order : 623613 </td>
-                <td width="55%">- น้ำปลา <br> - น้ำตาล  <br> - ผงชูรส</td>
-                <td>รวมการสั่งซื้อ : <br> 990 บาท</td>
-                <td>12-12-2024</td>
+                <td>{{ $i++ }}</td>
+                <td>ID Order : {{ $myOrderDetail->code_orders }} </td>
+                <td> 
+                    @foreach($countOrdersDetails as $countOrdersDetail)
+                    <?php
+                         $product   =  DB::Table('tb_product')->where('product_id', $countOrdersDetail->product_id )->first();   
+                         $detail    =  DB::Table('tb_orders_detail')->where('code_orders', $countOrdersDetail->code_orders )->first();  
+
+                    ?>
+                    ( x{{ $detail->amount }} )  {{ $product->product_name }} <br>
+                    @endforeach
+                </td>
+                <td>ราคารวมส่ง : {{ $detail->price_total }}</td>
+                <td>วันที่ : {{ $detail->created_at }}</td>
             </tr>
-            <tr>
-                <td>2</td>
-                <td width="15%">ID Order : 623613 </td>
-                <td width="55%">- น้ำปลา <br> - น้ำตาล  <br> - ผงชูรส</td>
-                <td>รวมการสั่งซื้อ : <br> 990 บาท</td>
-                <td>12-12-2024</td>
-            </tr>
+            @endforeach
         </table>
 
     </div>

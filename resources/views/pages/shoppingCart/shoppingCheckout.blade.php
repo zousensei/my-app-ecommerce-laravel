@@ -39,12 +39,12 @@
     </div>
     </div>
 </div>
-<form action="" method="POST">
 
 <!-- checkoutComponent/checkoutAddress -->
 @include('pages.shoppingCart.checkoutComponent.checkoutAddress') 
 
-
+<form action="{{ url('/shoppingOrderDetail') }}" method="POST">
+@csrf
 <div class="container pt-3" >
     <div class="col-md-12" style="background-color:#fff;">
     <div class="container p-4">
@@ -108,9 +108,10 @@
             <p class="pb-2 fw-semibold">ราคารวมสินค้า <span  style="font-size: 1.25rem;font-weight: 600;line-height: 1.5rem;color:#ee4d2d ;">{{ number_format($sum_total + $checkMyOrder->transport_price,2) }}</span> บาท</p>
 
             <div class="col-md-6 custombtn" >
-                 <input class="form-check-input" type="text" value="{{ $checkMyOrder->code_orders }}" name="code_orders" hidden> 
-                 <input class="form-check-input" type="text" value="{{ $checkMyOrder->transport }}" name="transport" hidden> 
-                 <input class="form-check-input" type="text" value="{{ $checkMyOrder->transport_price }}" name="transport_price" hidden> 
+                 <input  type="text" value="{{ $sum_total + $checkMyOrder->transport_price }}" name="price_total" hidden> 
+                 <input  type="text" value="{{ $checkMyOrder->code_orders }}" name="code_orders" hidden> 
+                 <input  type="text" value="{{ $checkMyOrder->transport }}" name="transport" hidden> 
+                 <input  type="text" value="{{ $checkMyOrder->transport_price }}" name="transport_price" hidden> 
                 <button type="submit" >สั่งซื้อสินค้า</button>
                 <a href="{{url('/delOrders/'.$checkMyOrder->code_orders.'')}}" onclick="return confirm('คุณต้องการยกเลิก [ ออร์เดอร์นี้ ] ใช่ไหม ? ')">
                     <button type="button" style="background-color: #353b45;">ยกเลิก ออร์เดอร์

@@ -8,6 +8,7 @@ use App\Models\User;
 use App\Models\Products;
 use App\Models\Address;
 use App\Models\Orders;
+use App\Models\OrdersDetail;
 use Session;
 use DB;
 
@@ -23,18 +24,33 @@ class ShoppingCartColreoller extends Controller
     
         return view('pages.shoppingCart.shoppingCart')->with([ 'myCart' => $myCart,'my' => $my,'Order' => $Orders  ]);
     }
-    
 
     //-------------------------------------------------------------------------------------//
 
-    public function shoppingCheckout(){ 
+    public function OrderDetail()
+    {
+        $customer_id         = Session::get('cid');
+        $myOrdersDetail      = OrdersDetail::where('customer_id', $customer_id)->orderBy('created_at', 'desc')->first();
+        $myOrdersDetailGet   = OrdersDetail::where('code_orders', $myOrdersDetail->code_orders )->get();
+
+        return view('pages.shoppingCart.orderDetail')->with(['myOrdersDetail' => $myOrdersDetail, 'myOrdersDetailGet' => $myOrdersDetailGet ]);
+    }
+    
+    //-------------------------------------------------------------------------------------//
+
+    public function shoppingCheckout($id){ 
 
         $customer_id    = Session::get('cid') ;
         $customer       = User::find($customer_id);
         $addressOn      = Address::where('address_status','=','on')->where('customer_id', $customer_id)->first();
         $addressOff     = Address::where('address_status','=','off')->where('customer_id', $customer_id)->get();
 
+        if($id != 0){
+        $checkMyOrders  = Orders::where('code_orders', $id)->first();
+        }else{
         $checkMyOrders  = Orders::where('customer_id', $customer_id)->orderBy('created_at', 'desc')->first();
+        }
+
         $myOrders       = Orders::where('code_orders', $checkMyOrders->code_orders )->get();
 
         return view('pages.shoppingCart.shoppingCheckout')
@@ -51,13 +67,21 @@ class ShoppingCartColreoller extends Controller
             // Get the form data
             $product_id                      = $request->input('product_id');
             $amount                          = $request->input('amount');
-            $transport_price                 = $request->input('transport_price');
             $transport                       = $request->input('transport');
+            $transport_price                 = $request->input('transport_price');
             $code_orders                     = $request->input('code_orders');
-            $bank                            = $request->input('bank');
+            $bank_payment                    = $request->input('bank');
+            $price_total                     = $request->input('price_total');
 
             $customer_id                     = Session::get('cid') ;
             $addressOn                       = Address::where('address_status','=','on')->where('customer_id', $customer_id)->first();
+            $customer_name                   = $addressOn->customer_name; 
+            $customer_phone                  = $addressOn->customer_phone; 
+            $customer_address                = $addressOn->customer_address; 
+            $customer_tumbon                 = $addressOn->customer_tumbon; 
+            $customer_district               = $addressOn->customer_district; 
+            $customer_province               = $addressOn->customer_province; 
+            $customer_postcode               = $addressOn->customer_postcode; 
 
             if($addressOn === null){
 
@@ -66,26 +90,39 @@ class ShoppingCartColreoller extends Controller
 
             for ($i=0; $i < count($product_id); $i++) { 
                 
-                $ordersDetail                = new Orders;
-                $orders->customer_id         = $customer_id ;
-                $orders->transport           = $transport  ;
-                $orders->transport_price     = $transport_price  ;
-                $orders->code_orders         = $code_orders ;
-                $orders->product_id          = $product_id[$i] ; 
-                $orders->amount              = $amount[$i];
-                $orders->save();
-    
+                $ordersDetail                    = new OrdersDetail;
+                $ordersDetail->code_orders       = $code_orders ;
+                $ordersDetail->customer_id       = $customer_id  ;
+                $ordersDetail->product_id        = $product_id[$i]  ;
+                $ordersDetail->amount            = $amount[$i] ;
+                $ordersDetail->price_total       = $price_total ;  
+                $ordersDetail->transport         = $transport;
+                $ordersDetail->transport_price   = $transport_price;
+                $ordersDetail->bank_payment      = $bank_payment;
+
+                $ordersDetail->customer_name     = $customer_name;
+                $ordersDetail->customer_phone    = $customer_phone;
+                $ordersDetail->customer_address  = $customer_address;
+                $ordersDetail->customer_tumbon   = $customer_tumbon;
+                $ordersDetail->customer_district = $customer_district;
+                $ordersDetail->customer_province = $customer_province;
+                $ordersDetail->customer_postcode = $customer_postcode;
+
+                $ordersDetail->save();
+
+                Carts::where('product_id', $product_id[$i])->delete();
+                Orders::where('code_orders', $code_orders)->delete();
             }
 
             DB::commit();
-            return redirect('/shoppingCheckout') ;
+            return redirect('/orderDetail');
         } catch (\Throwable $th) {
             dd($th);
             DB::rollback();
-            return redirect('/shoppingCart')->withError('ไม่สามารถเพิ่มข้อมูล ออร์เดอร์ ได้ !');
+            return redirect('/shoppingCart')->withError('ไม่สามารถซื้อสินค้าได้ !');
         }
 
-        return view('pages.shoppingCart.orderDetail');
+        
     }
 
     //-------------------------------------------------------------------------------------//
@@ -166,7 +203,7 @@ class ShoppingCartColreoller extends Controller
             }
 
             DB::commit();
-            return redirect('/shoppingCheckout') ;
+            return redirect('/shoppingCheckout/0') ;
         } catch (\Throwable $th) {
             dd($th);
             DB::rollback();

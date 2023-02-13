@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\User;
 use App\Models\Address;
+use App\Models\Orders;
+use App\Models\OrdersDetail;
 use Session;
 use DB;
 
@@ -14,10 +16,19 @@ class AccountController extends Controller
 
         $customer_id = Session::get('cid') ;
         $customer    = User::find($customer_id);
+
+        //ที่อยู่
         $addressOn   = Address::where('address_status','=','on')->where('customer_id', $customer_id)->first();
         $addressOff  = Address::where('address_status','=','off')->where('customer_id', $customer_id)->get();
 
-        return view('pages.account.homeAccount')->with([ 'customer' => $customer, 'addressOn' => $addressOn, 'addressOff' => $addressOff ]);
+        //การสั่งซื้อของฉัน
+        $myOrderDetails  = OrdersDetail::where('customer_id', $customer_id)->groupBy('code_orders')->orderBy('created_at', 'desc')->get(['code_orders']);
+
+        //ออร์เดอร์ที่ยังไม่ชำระเงิน
+        $Orders      = Orders::where('customer_id', $customer_id)->groupBy('code_orders')->orderBy('created_at', 'desc')->get(['code_orders']);
+
+        return view('pages.account.homeAccount')
+        ->with([ 'customer' => $customer, 'addressOn' => $addressOn, 'addressOff' => $addressOff, 'myOrderDetails' => $myOrderDetails, 'Order' => $Orders ]);
     }
 
     //-------------------------------------------------------------------------------------//

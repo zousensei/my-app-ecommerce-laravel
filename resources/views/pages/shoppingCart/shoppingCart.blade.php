@@ -150,7 +150,11 @@
                 <td width="20%" class="text-center">วันที่ {{ $Orders->created_at }}</td>
                 <td width="20%" >
                 <div class="custombtn text-center">
-                  <button type="button" style="width:40%; background-color: #353b45; padding: 8px; font-size: 15px;">ดำเนินการต่อ</button>
+                  <a href="{{url('/shoppingCheckout/'.$Orders->code_orders.'')}}">
+                    <button type="button" style="width:40%; background-color: #353b45; padding: 8px; font-size: 15px;">
+                            ดำเนินการต่อ
+                    </button>
+                  </a>
                   <a href="{{url('/delOrders/'.$Orders->code_orders.'')}}" onclick="return confirm('คุณต้องการยกเลิกออ์เดอร์ [ {{ $Orders->code_orders }} ] ใช่ไหม ? ')">
                     <button type="button" style="width:40%; background-color: #dc3545; padding: 8px; font-size: 15px;">
                         ยกเลิก
