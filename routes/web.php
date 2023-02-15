@@ -32,6 +32,7 @@ Route::get('/checkListProduct',       [ShoppingCartColreoller::class,'checkListP
 Route::get('/shoppingCart',           [ShoppingCartColreoller::class,'shoppingCart']);             
 Route::post('/addNewOrders',          [ShoppingCartColreoller::class,'addNewOrders']); 
 Route::get('/delOrders/{id}',         [ShoppingCartColreoller::class,'delOrders']);              
+Route::get('/delListOrders/{id}',         [ShoppingCartColreoller::class,'delListOrders']);              
 Route::get('/shoppingCheckout/{id}',  [ShoppingCartColreoller::class,'shoppingCheckout']);    
 Route::post('/shoppingOrderDetail',   [ShoppingCartColreoller::class,'shoppingOrderDetail']);    
 Route::get('/orderDetail',            [ShoppingCartColreoller::class,'OrderDetail']);    

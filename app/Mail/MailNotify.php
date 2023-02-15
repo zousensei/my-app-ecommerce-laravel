@@ -28,7 +28,7 @@ class MailNotify extends Mailable
      */
     public function build()
     {
-        return $this->from('zon.sensei.th@gmail.com', 'ZENZOU SHOP') 
+        return $this->from('zon.sensei.th@gmail.com', 'ZENZOU-SHOP') 
         ->subject($this->data['subject'])
         ->view('pages.auth.email-template')->with("data",$this->data);
     }

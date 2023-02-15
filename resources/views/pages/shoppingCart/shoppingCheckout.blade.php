@@ -59,6 +59,8 @@
                 $product   =  DB::Table('tb_product')->where('product_id', $myOrders->product_id )->first();   
                 $sum       =  $product->product_price * $myOrders->amount ;
                 $sum_total += $sum ;
+
+                if($product->product_amount >= 1){
             ?>
             <tr>
                 <td width="10%"><img src="{{ asset('imgs/product/1.jfif') }}" class="rounded-0" alt="..." width="100rem"> </td>
@@ -68,7 +70,24 @@
                 จำนวน : x{{ $myOrders->amount }} <br>
                 ราคารวม : {{ number_format($product->product_price *  $myOrders->amount,2) }} บาท 
                 </td>
+                <td></td>
             </tr>
+
+            <?php }else{ ?>
+
+            <tr style="background-color: #f5c2c7 ;">
+                <td width="10%"><img src="{{ asset('imgs/product/1.jfif') }}" class="rounded-0" alt="..." width="100rem"> </td>
+                <td>
+                {{ $product->product_name }} ( สินค้าหมด ) <br>
+                ราคาต่อหน่วย : {{ $product->product_price }} บาท<br>
+                จำนวน : x{{ $myOrders->amount }} <br>
+                ราคารวม : {{ number_format($product->product_price *  $myOrders->amount,2) }} บาท 
+                </td>
+                <td class="pt-5"><a href="{{ url('/delListOrders/'.$product->product_id.'') }}"><span class="badge rounded-pill text-bg-danger">ลบ</span></a></td>
+            </tr>
+
+            <?php } ?>
+
             <input class="form-check-input" type="text" value="{{ $myOrders->product_id  }}" name="product_id[]" hidden> 
             <input class="form-check-input" type="text" value="{{ $myOrders->amount }}" name="amount[]" hidden> 
             @endforeach
@@ -112,6 +131,7 @@
                  <input  type="text" value="{{ $checkMyOrder->code_orders }}" name="code_orders" hidden> 
                  <input  type="text" value="{{ $checkMyOrder->transport }}" name="transport" hidden> 
                  <input  type="text" value="{{ $checkMyOrder->transport_price }}" name="transport_price" hidden> 
+
                 <button type="submit" >สั่งซื้อสินค้า</button>
                 <a href="{{url('/delOrders/'.$checkMyOrder->code_orders.'')}}" onclick="return confirm('คุณต้องการยกเลิก [ ออร์เดอร์นี้ ] ใช่ไหม ? ')">
                     <button type="button" style="background-color: #353b45;">ยกเลิก ออร์เดอร์

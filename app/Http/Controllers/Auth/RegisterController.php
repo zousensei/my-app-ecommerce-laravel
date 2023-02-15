@@ -32,6 +32,7 @@ class RegisterController extends Controller
             $customer = new User();
             $customer->customer_email    = $request->customer_email;
             $customer->customer_phone    = $request->customer_phone;
+            $customer->customer_stetus   = '2';
             $customer->customer_username = $request->customer_username;
             $customer->customer_password = Hash::make($request['customer_password']);
             $customer->save();
@@ -46,7 +47,7 @@ class RegisterController extends Controller
         
             $data = [ //ข้อมูลที่ส่งไปใน email 
                 'subject'=>'['.$otp.'] คือรหัสยืนยันของคุณ',
-                'body'=>'รหัสยืนยันตัวตนของคุณคือ ['.$otp.']'
+                'body'=>'รหัสยืนยันตัวตนของคุณคือ '.$otp.''
             ];
 
             Mail::to($email)->send(new MailNotify($data));
@@ -74,11 +75,19 @@ class RegisterController extends Controller
             $email_otp = OtpRegister::where(['otp_code' => $otp_code, 'otp_email'=>$otp_email])->first();
             
             if ($email_otp != null) {
-                $otp_ids   = $email_otp->otp_id;
-                return redirect('/delOtp/'.$otp_ids.''); 
 
+                $otp_ids  = $email_otp->otp_id;
+
+                $check    = User::where('customer_email', $email_otp->otp_email)->first();
+                $customer_id = $check->customer_id ;
+
+                $customer = User::findOrFail($customer_id);        
+                $customer->customer_stetus = '1';
+                $customer->save();
+
+                return redirect('/delOtp/'.$otp_ids.''); 
             } else {
-               
+
                 return view('pages.auth.registerOTP')->with(['email'=>$otp_email, 'success' => 'รหัส OTP ไม่ตรงกัน กรุณากรอกใหม่']);       
             }
 

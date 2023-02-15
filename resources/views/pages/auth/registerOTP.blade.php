@@ -6,8 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <!-- css bootstrap -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD" crossorigin="anonymous">
-    <!-- sweetalert2 -->
-    <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
     <title>ZENZOU</title>
   
     <style>
@@ -53,7 +52,7 @@
               <form action="{{url('/checkOtpRegister')}}" method="POST">
                     @csrf
                     <div class="mb-3">
-                      <input type="text" class="form-control" name="otp_code" placeholder="รหัสยืนยันตัวตน">
+                      <input type="text" class="form-control" name="otp_code" placeholder="รหัสยืนยันตัวตน" required>
                       <input type="text" class="form-control" name="otp_email"  value = "{{ $email }}" hidden>
                     </div>
                     <div class="custombtn" >
@@ -70,8 +69,11 @@
 </div>
 <div class="col-md-4"></div>
 
+<!-- sweetalert2 -->
+<script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
 <script>
-    var alert = "{{Session::get('success')}}";
+    var alert = "{{ @$success }}";
     if(alert){
         Swal.fire({
             text : alert,

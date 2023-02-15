@@ -110,8 +110,16 @@ class ShoppingCartColreoller extends Controller
 
                 $ordersDetail->save();
 
+                //ลบสินค้าในตระกร้า
                 Carts::where('product_id', $product_id[$i])->delete();
+
+                //ลบรายการออร์เดอร์ค้างชำระ
                 Orders::where('code_orders', $code_orders)->delete();
+
+                //อัพเดตจำนวนสินค้า
+                $product = Products::find($product_id[$i]);
+                $product->product_amount -= $amount[$i];
+                $product->save();
             }
 
             DB::commit();
@@ -222,6 +230,25 @@ class ShoppingCartColreoller extends Controller
 
             DB::commit();
             return redirect('/shoppingCart')->with('success', 'ยกเลิกรายการ ออร์เดอร์ เรียบร้อยแล้ว !');
+        } catch (\Throwable $th) {
+            dd($th);
+            DB::rollback();
+            return back()->withError('ยกเลิกข้อมูลไม่สำเร็จ');
+        }
+    }
+
+    //-------------------------------------------------------------------------------------//
+
+    public function delListOrders($id)
+    {
+        DB::beginTransaction();
+        try {
+
+            Orders::where('product_id', $id)->delete();
+            // Carts::where('product_id', $id)->delete();
+
+            DB::commit();
+            return back()->with('success', 'ยกเลิกรายการเรียบร้อย !');
         } catch (\Throwable $th) {
             dd($th);
             DB::rollback();

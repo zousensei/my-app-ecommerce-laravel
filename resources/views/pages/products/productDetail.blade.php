@@ -71,12 +71,30 @@
                       <div class="col-md-6 py-3 ">
                         <h6 class="fw-semibold">เลือกจำนวนสินค้า</h6>
                         <input type="number" class="form-control" min="1" max="<?php echo  $product_qty ?>" name="amount" value="1"/>
+                        
+                        <?php if($product_qty >= 1 ){ ?>
                         <small>( มีสินค้าทั้งหมด <?php echo  $product_qty ?> ชิ้น )</small>
+                        <?php }else{ ?>
+                        <small class="text-danger">( สินค้าหมด )</small>
+                        <?php } ?>
+                     
                       </div>
 
                       <div class="pt-3 custombtn">
-                        <button type="submit" >ซื้อสินค้า</button>
-                        <a href="javascript:;"  onclick="addCart();"><button type="button">ใส่ตระกร้า</button></a>
+                        <?php if($product_qty >= 1 ){ ?>
+
+                            <?php if(Session::get('cid')){ ?>
+                            <button type="submit" >ซื้อสินค้า</button>
+                            <a href="javascript:;"  onclick="addCart();"><button type="button">ใส่ตระกร้า</button></a>
+                            <?php }else{ ?>
+                              <a href="{{url('/login')}}"><button type="button">สินค้าหมด</button></a>
+                              <a href="{{url('/login')}}"><button type="button">ใส่ตระกร้า</button></a>
+                            <?php } ?>
+
+                        <?php }else{ ?>
+                        <button type="button"  style="background-color:#6c757d ;">สินค้าหมด</button>
+                        <button type="button"  style="background-color:#6c757d ;">ใส่ตระกร้า</button>
+                        <?php } ?>
                       </div>
 
                   </form>
